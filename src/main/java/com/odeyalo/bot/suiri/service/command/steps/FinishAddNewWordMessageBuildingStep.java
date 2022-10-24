@@ -1,8 +1,8 @@
 package com.odeyalo.bot.suiri.service.command.steps;
 
 import com.odeyalo.bot.suiri.domain.AddNewWordMessage;
-import com.odeyalo.bot.suiri.service.command.support.AddNewWordState;
-import com.odeyalo.bot.suiri.service.command.support.AddNewWordStateRepository;
+import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordState;
+import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordStateRepository;
 import com.odeyalo.bot.suiri.support.TelegramUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

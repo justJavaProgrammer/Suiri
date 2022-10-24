@@ -12,17 +12,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Builder
-@Table(name = "users")
-public class User {
+public class DictionaryItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private String firstName;
+    private String originalText;
     @Column(nullable = false)
-    private String lastName;
-    @Column(nullable = false)
-    private String telegramId;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Dictionary userDictionary;
+    private String translatedText;
+    private String picture;
+    @ManyToOne
+    private Dictionary dictionary;
 }

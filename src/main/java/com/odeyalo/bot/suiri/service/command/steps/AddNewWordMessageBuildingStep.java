@@ -1,7 +1,7 @@
 package com.odeyalo.bot.suiri.service.command.steps;
 
 import com.odeyalo.bot.suiri.domain.AddNewWordMessage;
-import com.odeyalo.bot.suiri.service.command.support.AddNewWordState;
+import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordState;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

@@ -1,9 +1,8 @@
 package com.odeyalo.bot.suiri.service.command.steps;
 
 import com.odeyalo.bot.suiri.domain.AddNewWordMessage;
-import com.odeyalo.bot.suiri.service.command.support.AddNewWordState;
-import com.odeyalo.bot.suiri.service.command.support.AddNewWordStateRepository;
-import com.odeyalo.bot.suiri.support.TelegramFileSaver;
+import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordState;
+import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordStateRepository;
 import com.odeyalo.bot.suiri.support.TelegramUtils;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -20,13 +19,10 @@ import java.util.List;
 @Component
 public class PictureAddNewWordMessageBuildingStep extends AbstractAddNewWordMessageBuildingStep {
     private final Logger logger = LoggerFactory.getLogger(PictureAddNewWordMessageBuildingStep.class);
-    private final TelegramFileSaver fileSaver;
-    private static final byte BEST_QUALITY_TELEGRAM_IMAGE_INDEX = 2;
 
     @Autowired
-    public PictureAddNewWordMessageBuildingStep(AddNewWordStateRepository stateRepository, TelegramFileSaver fileSaver) {
+    public PictureAddNewWordMessageBuildingStep(AddNewWordStateRepository stateRepository) {
         super(stateRepository);
-        this.fileSaver = fileSaver;
     }
 
     @SneakyThrows
@@ -38,16 +34,23 @@ public class PictureAddNewWordMessageBuildingStep extends AbstractAddNewWordMess
             this.logger.warn("The step was skipped since state was wrong. Expected: {}, received: {}",  currentState, getState());
             return null;
         }
-        List<PhotoSize> filePath = update.getMessage().getPhoto();
-        PhotoSize photoSize = filePath.get(BEST_QUALITY_TELEGRAM_IMAGE_INDEX);
-        String fileId = photoSize.getFileId();
-        this.fileSaver.save(fileId);
-        this.stateRepository.saveState(chatId, AddNewWordState.FINISH);
+        String fileId = getFileId(update);
+        message.setPicture(fileId);
         return new SendMessage(chatId, "Success saved the word!");
     }
+
 
     @Override
     public AddNewWordState getState() {
         return AddNewWordState.PICTURE;
     }
+
+
+    private String getFileId(Update update) {
+        List<PhotoSize> filePath = update.getMessage().getPhoto();
+        int index = filePath.size() - 1;
+        PhotoSize photoSize = filePath.get(index);
+        return photoSize.getFileId();
+    }
+
 }
