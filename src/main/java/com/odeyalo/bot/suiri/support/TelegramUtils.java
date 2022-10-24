@@ -7,7 +7,6 @@ public class TelegramUtils {
 
     public static String getText(Update update) {
         return update.getMessage().getText();
-
     }
 
     public static String getChatId(Update update) {
