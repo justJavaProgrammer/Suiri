@@ -1,4 +1,4 @@
-package com.odeyalo.bot.suiri.service.command.support;
+package com.odeyalo.bot.suiri.service.command.support.state;
 
 public interface StateRepository<T> {
     void saveState(String id, T state);
