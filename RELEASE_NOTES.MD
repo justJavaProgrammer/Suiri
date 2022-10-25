@@ -1,5 +1,9 @@
 ## RELEASE NOTES
 
+## 1.1.0-SNAPSHOT
+
+* Added github actions to project
+* Added docker files for local and test environments 
 
 ## 1.0.0-SNAPSHOT
 
