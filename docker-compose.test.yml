@@ -1,0 +1,32 @@
+version: '3.0'
+services:
+  suiri-bot:
+    ports:
+      - "8000:8000"
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: suiribot_container
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - test.env
+    volumes:
+      - "./maven-rep:/root/.m2"
+
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: suiri_db
+    ports:
+      - "5432:5432"
+    env_file:
+      test.env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - "./database.creation.sql:/docker-entrypoint-initdb.d/create_tables.sql"
