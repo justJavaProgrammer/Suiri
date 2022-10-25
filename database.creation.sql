@@ -1,0 +1,3 @@
+CREATE USER developer;
+
+CREATE DATABASE suiri;
