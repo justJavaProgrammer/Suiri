@@ -1,5 +1,8 @@
 ## RELEASE NOTES
 
+## 1.2.0-SNAPSHOT
+* Added flyway migration
+
 ## 1.1.0-SNAPSHOT
 
 * Added github actions to project
