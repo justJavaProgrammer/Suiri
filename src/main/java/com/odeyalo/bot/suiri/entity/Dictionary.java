@@ -18,7 +18,7 @@ public class Dictionary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private User user;
     @ManyToMany(cascade = CascadeType.ALL)
     private List<DictionaryItem> items = new ArrayList<>();

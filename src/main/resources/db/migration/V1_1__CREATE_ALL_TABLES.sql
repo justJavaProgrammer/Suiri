@@ -9,7 +9,7 @@ CREATE TABLE users
 CREATE TABLE dictionary
 (
     id      BIGINT PRIMARY KEY,
-    user_id BIGINT REFERENCES users (id) NOT NULL
+    user_id BIGINT REFERENCES users (id)
 );
 
 CREATE TABLE dictionary_item
@@ -18,14 +18,14 @@ CREATE TABLE dictionary_item
     original_text   varchar(255)                       NOT NULL,
     picture         varchar(255)                       NOT NULL,
     translated_text varchar(255)                       NOT NULL,
-    dictionary_id   BIGINT REFERENCES dictionary (id) NOT NULL
+    dictionary_id   BIGINT REFERENCES dictionary (id)
 );
 
 
 CREATE TABLE dictionary_dictionary_item
 (
-    dictionary_id   BIGINT REFERENCES dictionary (id)      NOT NULL,
-    items_id BIGINT REFERENCES dictionary_item (id) NOT NULL
+    dictionary_id   BIGINT REFERENCES dictionary (id),
+    items_id BIGINT REFERENCES dictionary_item (id)
 
 );
 

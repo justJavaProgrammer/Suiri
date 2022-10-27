@@ -12,19 +12,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Builder
-@Table(name = "users")
-public class User {
+@Table(name = "user_settings")
+public class UserSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private String firstName;
-    @Column
-    private String lastName;
-    @Column(nullable = false, unique = true)
-    private String telegramId;
+    private String language;
+    private boolean enableNotification;
     @OneToOne(cascade = CascadeType.ALL)
-    private Dictionary userDictionary;
-    @OneToOne(cascade = CascadeType.ALL)
-    private UserSettings userSettings;
+    private User user;
 }
