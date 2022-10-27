@@ -4,6 +4,7 @@ import com.odeyalo.bot.suiri.domain.AddNewWordMessage;
 import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordState;
 import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordStateRepository;
 import com.odeyalo.bot.suiri.support.TelegramUtils;
+import com.odeyalo.bot.suiri.support.lang.ResponseMessageResolverDecorator;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +22,8 @@ public class PictureAddNewWordMessageBuildingStep extends AbstractAddNewWordMess
     private final Logger logger = LoggerFactory.getLogger(PictureAddNewWordMessageBuildingStep.class);
 
     @Autowired
-    public PictureAddNewWordMessageBuildingStep(AddNewWordStateRepository stateRepository) {
-        super(stateRepository);
+    public PictureAddNewWordMessageBuildingStep(AddNewWordStateRepository stateRepository, ResponseMessageResolverDecorator responseMessageResolverDecorator) {
+        super(stateRepository, responseMessageResolverDecorator);
     }
 
     @SneakyThrows
@@ -36,7 +37,8 @@ public class PictureAddNewWordMessageBuildingStep extends AbstractAddNewWordMess
         }
         String fileId = getFileId(update);
         message.setPicture(fileId);
-        return new SendMessage(chatId, "Success saved the word!");
+        String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, "language.word.add.step.picture");
+        return new SendMessage(chatId, responseMessage);
     }
 
 
