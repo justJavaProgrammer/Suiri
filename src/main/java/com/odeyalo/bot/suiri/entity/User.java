@@ -19,10 +19,12 @@ public class User {
     private Long id;
     @Column(nullable = false)
     private String firstName;
-    @Column(nullable = false)
+    @Column
     private String lastName;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String telegramId;
     @OneToOne(cascade = CascadeType.ALL)
     private Dictionary userDictionary;
+    @OneToOne(cascade = CascadeType.ALL)
+    private UserSettings userSettings;
 }
