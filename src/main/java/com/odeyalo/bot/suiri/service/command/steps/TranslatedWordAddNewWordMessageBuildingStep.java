@@ -4,6 +4,7 @@ import com.odeyalo.bot.suiri.domain.AddNewWordMessage;
 import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordState;
 import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordStateRepository;
 import com.odeyalo.bot.suiri.support.TelegramUtils;
+import com.odeyalo.bot.suiri.support.lang.ResponseMessageResolverDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class TranslatedWordAddNewWordMessageBuildingStep extends AbstractAddNewW
     private final Logger logger = LoggerFactory.getLogger(TranslatedWordAddNewWordMessageBuildingStep.class);
 
     @Autowired
-    public TranslatedWordAddNewWordMessageBuildingStep(AddNewWordStateRepository stateRepository) {
-        super(stateRepository);
+    public TranslatedWordAddNewWordMessageBuildingStep(AddNewWordStateRepository stateRepository, ResponseMessageResolverDecorator responseMessageResolverDecorator) {
+        super(stateRepository, responseMessageResolverDecorator);
     }
 
     @Override
@@ -34,7 +35,8 @@ public class TranslatedWordAddNewWordMessageBuildingStep extends AbstractAddNewW
         String text = TelegramUtils.getText(update);
         this.logger.info("Received translated word: {}", text);
         message.setTranslatedWords(Collections.singletonList(text));
-        return new SendMessage(chatId, "Now send the picture");
+        String responseMessage = responseMessageResolverDecorator.getResponseMessage(update, "language.word.add.step.translated.word");
+        return new SendMessage(chatId, responseMessage);
     }
 
     @Override
