@@ -1,5 +1,10 @@
 ## RELEASE NOTES
 
+## 1.3.0-SNAPSHOT
+* Added user settings
+* Added multi-language support for some commands
+* Added new flyway migration file
+
 ## 1.2.0-SNAPSHOT
 * Added flyway migration
 
