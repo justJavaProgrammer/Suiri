@@ -13,6 +13,8 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static com.odeyalo.bot.suiri.service.command.steps.AddNewWordLanguagePropertiesConstants.ADD_WORD_ORIGINAL_WORD_STEP_MESSAGE_PROPERTY;
+
 @Component
 public class OriginalWordAddNewWordMessageBuildingStep extends AbstractAddNewWordMessageBuildingStep {
     private final Logger logger = LoggerFactory.getLogger(OriginalWordAddNewWordMessageBuildingStep.class);
@@ -33,7 +35,7 @@ public class OriginalWordAddNewWordMessageBuildingStep extends AbstractAddNewWor
         String text = TelegramUtils.getText(update);
         this.logger.info("Received original word: {}", text);
         message.setOriginalWord(text);
-        String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, "language.word.add.step.original.word");
+        String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, ADD_WORD_ORIGINAL_WORD_STEP_MESSAGE_PROPERTY);
         return new SendMessage(chatId, responseMessage);
     }
 
