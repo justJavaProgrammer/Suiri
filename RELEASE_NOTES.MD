@@ -1,4 +1,6 @@
 ## RELEASE NOTES
+## 1.4.0-SNAPSHOT
+* Added full multi-language support to all commands
 
 ## 1.3.0-SNAPSHOT
 * Added user settings
