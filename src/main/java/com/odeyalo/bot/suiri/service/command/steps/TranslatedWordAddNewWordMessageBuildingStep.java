@@ -15,6 +15,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Collections;
 
+import static com.odeyalo.bot.suiri.service.command.steps.AddNewWordLanguagePropertiesConstants.ADD_WORD_TRANSLATED_WORD_STEP_MESSAGE_PROPERTY;
+
 @Component
 public class TranslatedWordAddNewWordMessageBuildingStep extends AbstractAddNewWordMessageBuildingStep {
     private final Logger logger = LoggerFactory.getLogger(TranslatedWordAddNewWordMessageBuildingStep.class);
@@ -35,7 +37,7 @@ public class TranslatedWordAddNewWordMessageBuildingStep extends AbstractAddNewW
         String text = TelegramUtils.getText(update);
         this.logger.info("Received translated word: {}", text);
         message.setTranslatedWords(Collections.singletonList(text));
-        String responseMessage = responseMessageResolverDecorator.getResponseMessage(update, "language.word.add.step.translated.word");
+        String responseMessage = responseMessageResolverDecorator.getResponseMessage(update, ADD_WORD_TRANSLATED_WORD_STEP_MESSAGE_PROPERTY);
         return new SendMessage(chatId, responseMessage);
     }
 

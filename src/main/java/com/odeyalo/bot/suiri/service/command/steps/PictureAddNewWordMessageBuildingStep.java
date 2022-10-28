@@ -17,6 +17,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
+import static com.odeyalo.bot.suiri.service.command.steps.AddNewWordLanguagePropertiesConstants.ADD_WORD_PICTURE_STEP_MESSAGE_PROPERTY;
+
 @Component
 public class PictureAddNewWordMessageBuildingStep extends AbstractAddNewWordMessageBuildingStep {
     private final Logger logger = LoggerFactory.getLogger(PictureAddNewWordMessageBuildingStep.class);
@@ -37,7 +39,7 @@ public class PictureAddNewWordMessageBuildingStep extends AbstractAddNewWordMess
         }
         String fileId = getFileId(update);
         message.setPicture(fileId);
-        String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, "language.word.add.step.picture");
+        String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, ADD_WORD_PICTURE_STEP_MESSAGE_PROPERTY);
         return new SendMessage(chatId, responseMessage);
     }
 

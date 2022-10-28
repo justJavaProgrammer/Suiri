@@ -11,6 +11,8 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static com.odeyalo.bot.suiri.service.command.steps.AddNewWordLanguagePropertiesConstants.ADD_WORD_FINISH_STEP_MESSAGE_PROPERTY;
+
 @Component
 public class FinishAddNewWordMessageBuildingStep extends AbstractAddNewWordMessageBuildingStep {
 
@@ -22,7 +24,7 @@ public class FinishAddNewWordMessageBuildingStep extends AbstractAddNewWordMessa
     @Override
     public BotApiMethod<?> processStep(Update update, AddNewWordMessage message) {
         String chatId = TelegramUtils.getChatId(update);
-        String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, "language.word.add.step.finish");
+        String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, ADD_WORD_FINISH_STEP_MESSAGE_PROPERTY);
         return new SendMessage(chatId, responseMessage);
     }
 
