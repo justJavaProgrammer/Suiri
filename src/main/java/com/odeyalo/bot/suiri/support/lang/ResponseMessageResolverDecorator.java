@@ -14,4 +14,5 @@ public interface ResponseMessageResolverDecorator {
      */
     String getResponseMessage(Update update, String property);
 
+    String getUserLanguage(Update update);
 }

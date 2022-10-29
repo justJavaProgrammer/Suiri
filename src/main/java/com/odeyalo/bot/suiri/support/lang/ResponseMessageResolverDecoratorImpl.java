@@ -22,4 +22,9 @@ public class ResponseMessageResolverDecoratorImpl implements ResponseMessageReso
         LanguageResponseMessageResolverStrategy resolver = container.getOrDefault(languageCode, Languages.ENGLISH);
         return resolver.getMessage(property);
     }
+
+    @Override
+    public String getUserLanguage(Update update) {
+        return languageResolver.resolveLang(update);
+    }
 }
