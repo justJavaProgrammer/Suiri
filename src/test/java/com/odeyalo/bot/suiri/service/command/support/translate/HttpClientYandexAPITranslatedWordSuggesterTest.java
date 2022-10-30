@@ -16,7 +16,7 @@ class HttpClientYandexAPITranslatedWordSuggesterTest extends AbstractIntegration
 
     @Test
     void suggestWords() {
-        Set<String> set = this.suggester.suggestWords("Hello", Languages.UKRAINIAN, 3);
+        Set<String> set = this.suggester.suggestWords("Привет", Languages.ENGLISH, 3);
 
         assertNotEquals(set.size(), 0);
 
