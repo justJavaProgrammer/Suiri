@@ -24,9 +24,10 @@ public class HttpClientYandexAPITranslatedWordSuggester implements AbstractYande
     private final RestTemplate restTemplate;
     private final String rootUrl;
     private final WordLanguageDetector wordLanguageDetector;
+    private final YandexSessionUpdater sessionUpdater;
     private final SuggestWordTranslateRequestExceptionHandler exceptionHandler;
     private final String SESSION_ID_KEY = "sid";
-    private String sessionIdValue = "041075cd.635d7623.8ed1ce6e.74722d74657874-4-0";
+    private String sessionIdValue;
     private final String SRV_KEY = "srv";
     private final String SRV_VALUE = "tr-text";
     private final String UI_KEY = "ui";
@@ -42,16 +43,21 @@ public class HttpClientYandexAPITranslatedWordSuggester implements AbstractYande
 
     @Autowired
     public HttpClientYandexAPITranslatedWordSuggester(RestTemplate restTemplate,
-                                                      @Value("${app.translate.yandex.http.dictionary.url}") String rootUrl, WordLanguageDetector wordLanguageDetector, SuggestWordTranslateRequestExceptionHandler exceptionHandler) {
+                                                      @Value("${app.translate.yandex.http.dictionary.url}") String rootUrl,
+                                                      WordLanguageDetector wordLanguageDetector,
+                                                      YandexSessionUpdater sessionUpdater,
+                                                      SuggestWordTranslateRequestExceptionHandler exceptionHandler) {
         this.restTemplate = restTemplate;
         this.rootUrl = rootUrl;
         this.wordLanguageDetector = wordLanguageDetector;
+        this.sessionUpdater = sessionUpdater;
         this.exceptionHandler = exceptionHandler;
     }
 
     @Override
     public Set<String> suggestWords(String originalWord, String requiredLanguage, Integer size) {
         String languageCode = this.wordLanguageDetector.detectLanguageCode(originalWord);
+        this.sessionIdValue = this.sessionUpdater.updateIfExpired();
         String requestUrl = UriComponentsBuilder.fromHttpUrl(rootUrl)
                 .queryParam(SESSION_ID_KEY, sessionIdValue)
                 .queryParam(UI_KEY, languageCode)

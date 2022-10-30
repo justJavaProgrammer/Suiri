@@ -22,9 +22,10 @@ public class HttpClientYandexAPISuggestWordTranslateRequestExceptionHandler impl
     private final RestTemplate restTemplate;
     private final Logger logger = LoggerFactory.getLogger(HttpClientYandexAPISuggestWordTranslateRequestExceptionHandler.class);
 
+    private final YandexSessionUpdater sessionUpdater;
     private final String url;
     private final String ID_KEY = "id";
-    private String idValue = "041075cd.635d7623.8ed1ce6e.74722d74657874-4-0";
+    private String idValue;
     private final String SRV_KEY = "srv";
     private final String SRV_VALUE = "tr-text";
     private final String LANG_KEY = "lang";
@@ -36,13 +37,16 @@ public class HttpClientYandexAPISuggestWordTranslateRequestExceptionHandler impl
 
     @Autowired
     public HttpClientYandexAPISuggestWordTranslateRequestExceptionHandler(RestTemplate restTemplate,
+                                                                          YandexSessionUpdater sessionUpdater,
                                                                           @Value("${app.translate.detect.language.yandex.http.url.translate}") String url) {
         this.restTemplate = restTemplate;
+        this.sessionUpdater = sessionUpdater;
         this.url = url;
     }
 
     @Override
     public Set<String> suggestWords(String word, String fromLanguage, String toLanguage) {
+        this.idValue = this.sessionUpdater.updateIfExpired();
         String requestUrl = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam(ID_KEY, idValue)
                 .queryParam(SRV_KEY, SRV_VALUE)

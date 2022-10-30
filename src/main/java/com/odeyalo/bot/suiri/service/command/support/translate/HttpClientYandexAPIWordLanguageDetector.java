@@ -15,10 +15,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class HttpClientYandexAPIWordLanguageDetector implements WordLanguageDetector {
     private final RestTemplate restTemplate;
+    private final YandexSessionUpdater sessionUpdater;
     private final String url;
 
     private final String SESSION_ID_KEY = "sid";
-    private String sessionIdValue = "041075cd.635d7623.8ed1ce6e.74722d74657874-4-0";
+    private String sessionIdValue;
     private final String SRV_KEY = "srv";
     private final String SRV_VALUE = "tr-text";
     private String TEXT_KEY = "text";
@@ -27,13 +28,16 @@ public class HttpClientYandexAPIWordLanguageDetector implements WordLanguageDete
 
     @Autowired
     public HttpClientYandexAPIWordLanguageDetector(RestTemplate restTemplate,
+                                                   YandexSessionUpdater sessionUpdater,
                                                    @Value("${app.translate.detect.language.yandex.http.url.detect}") String url) {
         this.restTemplate = restTemplate;
+        this.sessionUpdater = sessionUpdater;
         this.url = url;
     }
 
     @Override
     public String detectLanguageCode(String word) {
+        this.sessionIdValue = this.sessionUpdater.updateIfExpired();
         String requestUrl = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam(SESSION_ID_KEY, sessionIdValue)
                 .queryParam(SRV_KEY, SRV_VALUE)
