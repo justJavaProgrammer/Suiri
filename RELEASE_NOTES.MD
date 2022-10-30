@@ -1,4 +1,8 @@
 ## RELEASE NOTES
+
+## 1.5.0-SNAPSHOT
+* Added choices when user enter a translated word to increase user experience
+
 ## 1.4.0-SNAPSHOT
 * Added full multi-language support to all commands
 

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.odeyalo.bot</groupId>
     <artifactId>suiri</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
     <name>Suiri</name>
     <description>Suiri is a powerful telegram bot to learn new words</description>
     <properties>
@@ -50,6 +50,12 @@
             <version>6.1.0</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.10.2</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
