@@ -34,6 +34,7 @@ public class HttpClientYandexAPISuggestWordTranslateRequestExceptionHandler impl
     private final String TEXT_KEY = "text";
     private final String FORMAT_KEY = "format";
     private final String FORMAT_TEXT_VALUE = "text";
+    private final String SESSION_SUFFIX = "-0-0";
 
     @Autowired
     public HttpClientYandexAPISuggestWordTranslateRequestExceptionHandler(RestTemplate restTemplate,
@@ -48,7 +49,7 @@ public class HttpClientYandexAPISuggestWordTranslateRequestExceptionHandler impl
     public Set<String> suggestWords(String word, String fromLanguage, String toLanguage) {
         this.idValue = this.sessionUpdater.updateIfExpired();
         String requestUrl = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam(ID_KEY, idValue)
+                .queryParam(ID_KEY, idValue + SESSION_SUFFIX)
                 .queryParam(SRV_KEY, SRV_VALUE)
                 .queryParam(LANG_KEY, fromLanguage + "-" + toLanguage)
                 .queryParam(REASON_KEY, REASON_AUTO_VALUE)
