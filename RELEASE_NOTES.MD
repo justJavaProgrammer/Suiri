@@ -1,5 +1,8 @@
 ## RELEASE NOTES
 
+## 1.5.1-SNAPSHOT
+* The bug with Yandex API fixed 
+
 ## 1.5.0-SNAPSHOT
 * Added choices when user enter a translated word to increase user experience
 
