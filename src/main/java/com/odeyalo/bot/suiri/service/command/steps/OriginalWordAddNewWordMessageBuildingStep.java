@@ -58,14 +58,19 @@ public class OriginalWordAddNewWordMessageBuildingStep extends AbstractAddNewWor
 
 
     private ReplyKeyboardMarkup getTranslatedWordSuggestionKeyboard(String originalWord, String userLanguage){
-        Set<String> words = this.translatedWordSuggester.suggestWords(originalWord, userLanguage);
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        keyboardMarkup.setOneTimeKeyboard(true);
-        keyboardMarkup.setResizeKeyboard(true);
-        KeyboardRow buttons = new KeyboardRow();
-        buttons.addAll(new ArrayList<>(words));
-        keyboardMarkup.setKeyboard(Collections.singletonList(buttons));
-        return keyboardMarkup;
+        try {
+            Set<String> words = this.translatedWordSuggester.suggestWords(originalWord, userLanguage);
+            ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+            keyboardMarkup.setOneTimeKeyboard(true);
+            keyboardMarkup.setResizeKeyboard(true);
+            KeyboardRow buttons = new KeyboardRow();
+            buttons.addAll(new ArrayList<>(words));
+            keyboardMarkup.setKeyboard(Collections.singletonList(buttons));
+            return keyboardMarkup;
+        } catch (Exception ex) {
+            this.logger.error("Failed to suggest translated words", ex);
+            return null;
+        }
     }
 
 }
