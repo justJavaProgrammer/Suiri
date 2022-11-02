@@ -1,5 +1,8 @@
 ## RELEASE NOTES
 
+## 1.6.0-SNAPSHOT
+* Added remainder notifications and added support to enable/disable them
+
 ## 1.5.1-SNAPSHOT
 * The bug with Yandex API fixed 
 
