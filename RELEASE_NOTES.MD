@@ -10,7 +10,7 @@
 * Added choices when user enter a translated word to increase user experience
 
 ## 1.4.0-SNAPSHOT
-* Added full multi-langua11ge support to all commands
+* Added full multi-language support to all commands
 
 ## 1.3.0-SNAPSHOT
 * Added user settings
