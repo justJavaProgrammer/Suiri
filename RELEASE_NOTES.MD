@@ -1,5 +1,8 @@
 ## RELEASE NOTES
 
+## 1.6.0-SNAPSHOT
+* Added remainder notifications and added support to enable/disable them
+
 ## 1.5.1-SNAPSHOT
 * The bug with Yandex API fixed 
 
@@ -7,7 +10,7 @@
 * Added choices when user enter a translated word to increase user experience
 
 ## 1.4.0-SNAPSHOT
-* Added full multi-language support to all commands
+* Added full multi-langua11ge support to all commands
 
 ## 1.3.0-SNAPSHOT
 * Added user settings
