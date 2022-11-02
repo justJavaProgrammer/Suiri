@@ -6,6 +6,8 @@ import com.odeyalo.bot.suiri.service.command.support.state.settings.UserSettings
 import com.odeyalo.bot.suiri.support.TelegramUtils;
 import com.odeyalo.bot.suiri.support.lang.GenericLanguagePropertiesConstants;
 import com.odeyalo.bot.suiri.support.lang.ResponseMessageResolverDecorator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -18,10 +20,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.odeyalo.bot.suiri.service.command.steps.settings.SettingsLanguagePropertiesConstants.DEFAULT_SETTINGS_MESSAGE_PROPERTY;
+import static com.odeyalo.bot.suiri.service.command.steps.settings.SettingsLanguagePropertiesConstants.NOTIFICATION_SETTINGS_PROPERTY;
 
 /**
  * CommandExecutor that executes '/settings' command and change user's settings
@@ -38,10 +42,13 @@ public class SettingsCommandExecutor implements CommandExecutor {
     private final Map<String, UserSettingsChanger> lastChangers;
     private final MultiLanguageCommandTranslatorDelegate translatorDelegate;
     private final ResponseMessageResolverDecorator responseMessageResolverDecorator;
+    private final Logger logger = LoggerFactory.getLogger(SettingsCommandExecutor.class);
+
     @Autowired
-    public SettingsCommandExecutor(List<UserSettingsChanger> changers, Map<String, UserSettingsChanger> lastChangers, MultiLanguageCommandTranslatorDelegate translatorDelegate, ResponseMessageResolverDecorator responseMessageResolverDecorator) {
+    public SettingsCommandExecutor(List<UserSettingsChanger> changers, MultiLanguageCommandTranslatorDelegate translatorDelegate, ResponseMessageResolverDecorator responseMessageResolverDecorator) {
         this.changers = changers.stream().collect(Collectors.toMap(UserSettingsChanger::getName, Function.identity()));
-        this.lastChangers = lastChangers;
+        this.logger.info("Initialized changers map with elements: {}", changers);
+        this.lastChangers = new ConcurrentHashMap<>();
         this.translatorDelegate = translatorDelegate;
         this.responseMessageResolverDecorator = responseMessageResolverDecorator;
     }
@@ -57,22 +64,16 @@ public class SettingsCommandExecutor implements CommandExecutor {
 
         User telegramUser = TelegramUtils.getTelegramUser(update);
 
+        String originalCommand = this.translatorDelegate.getOriginalCommand(update);
+        UserSettingsChanger userSettingsChanger = changers.get(originalCommand);
+        if (userSettingsChanger != null) {
+            lastChangers.put(chatId, userSettingsChanger);
+            return userSettingsChanger.change(update, new SettingsMessage(String.valueOf(telegramUser.getId()), text));
+        }
+
         if (lastChangers.containsKey(chatId)) {
             return lastChangers.get(chatId).change(update, new SettingsMessage(String.valueOf(telegramUser.getId()), text));
         }
-        String originalCommand = this.translatorDelegate.getOriginalCommand(update);
-        UserSettingsChanger userSettingsChanger = changers.get(originalCommand);
-        lastChangers.put(chatId, userSettingsChanger);
-        return userSettingsChanger.change(update, new SettingsMessage(String.valueOf(telegramUser.getId()), text));
-
-    }
-
-    private SendMessage getDefaultMessage(Update update) {
-        String chatId = TelegramUtils.getChatId(update);
-        String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, DEFAULT_SETTINGS_MESSAGE_PROPERTY);
-        SendMessage message = new SendMessage(chatId, responseMessage);
-        ReplyKeyboardMarkup replyMarkup = getKeyboardMarkup(update);
-        message.setReplyMarkup(replyMarkup);
         return message;
     }
 
@@ -89,11 +90,23 @@ public class SettingsCommandExecutor implements CommandExecutor {
 
     private ReplyKeyboardMarkup getKeyboardMarkup(Update update) {
         String language = this.responseMessageResolverDecorator.getResponseMessage(update, GenericLanguagePropertiesConstants.LANGUAGE);
+        String notification = this.responseMessageResolverDecorator.getResponseMessage(update, NOTIFICATION_SETTINGS_PROPERTY);
         KeyboardRow buttons = new KeyboardRow();
         buttons.add(0, language);
+        buttons.add(1, notification);
         List<KeyboardRow> keyboard = Collections.singletonList(buttons);
         ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup(keyboard);
         replyMarkup.setResizeKeyboard(true);
+        replyMarkup.setOneTimeKeyboard(true);
         return replyMarkup;
+    }
+
+    private SendMessage getDefaultMessage(Update update) {
+        String chatId = TelegramUtils.getChatId(update);
+        String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, DEFAULT_SETTINGS_MESSAGE_PROPERTY);
+        SendMessage message = new SendMessage(chatId, responseMessage);
+        ReplyKeyboardMarkup replyMarkup = getKeyboardMarkup(update);
+        message.setReplyMarkup(replyMarkup);
+        return message;
     }
 }
