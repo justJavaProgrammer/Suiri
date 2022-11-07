@@ -1,6 +1,7 @@
 package com.odeyalo.bot.suiri.service.command;
 
 import com.odeyalo.bot.suiri.service.callbacks.CallbackQueryHandler;
+import com.odeyalo.bot.suiri.service.callbacks.CallbackQueryHandlerDelegate;
 import com.odeyalo.bot.suiri.support.IncomingMessageCommandResolver;
 import com.odeyalo.bot.suiri.support.TelegramUtils;
 import org.slf4j.Logger;
@@ -19,14 +20,14 @@ public class SimpleCommandManager implements CommandManager {
     private final CommandExecutorRegistry container;
     private final IncomingMessageCommandResolver commandResolver;
     private final Map<String, CommandExecutor> multiStepCommandsCache;
-    private final CallbackQueryHandler handler;
+    private final CallbackQueryHandlerDelegate queryHandlerDelegate;
     private final Logger logger = LoggerFactory.getLogger(SimpleCommandManager.class);
 
     @Autowired
-    public SimpleCommandManager(CommandExecutorRegistry container, IncomingMessageCommandResolver commandResolver, CallbackQueryHandler handler) {
+    public SimpleCommandManager(CommandExecutorRegistry container, IncomingMessageCommandResolver commandResolver, CallbackQueryHandlerDelegate queryHandlerDelegate) {
         this.container = container;
         this.commandResolver = commandResolver;
-        this.handler = handler;
+        this.queryHandlerDelegate = queryHandlerDelegate;
         this.multiStepCommandsCache = new ConcurrentHashMap<>();
     }
 
@@ -35,7 +36,7 @@ public class SimpleCommandManager implements CommandManager {
         this.logger.info("Received update: {}", update);
         if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            return handler.handle(callbackQuery);
+            return queryHandlerDelegate.handleCallbackQuery(callbackQuery);
         }
 
         String commandName = resolveCommandName(update);
