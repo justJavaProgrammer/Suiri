@@ -35,7 +35,7 @@ public class OptionsInlineKeyboardUtils {
         List<List<InlineKeyboardButton>> rowsInline = getOptionsList(question);
         OptionsInlineKeyboardUtils.correctAnswerSet(rowsInline, question);
         ArrayList<List<InlineKeyboardButton>> keyboard = getKeyboardWithoutDuplicates(rowsInline);
-        Collections.shuffle(rowsInline);
+        Collections.shuffle(keyboard);
         return keyboard;
     }
 
