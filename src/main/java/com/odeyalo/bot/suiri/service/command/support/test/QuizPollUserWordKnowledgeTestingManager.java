@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import java.util.SortedSet;
 
+import static com.odeyalo.bot.suiri.service.command.support.TestUserKnowledgeLanguagePropertiesConstants.NOT_ENOUGH_WORDS_EXCEPTION_MESSAGE_PROPERTY;
 import static com.odeyalo.bot.suiri.service.command.support.TestUserKnowledgeLanguagePropertiesConstants.ON_START_PROPERTY;
 
 /**
@@ -37,6 +39,12 @@ public class QuizPollUserWordKnowledgeTestingManager extends AbstractUserWordKno
     @Override
     public BotApiMethod<?> getUserKnowledgeTest(Update update, User user) {
         String chatId = TelegramUtils.getChatId(update);
+
+        if (!checkWords(user)) {
+            String message = responseMessageResolverDecorator.getResponseMessage(update, NOT_ENOUGH_WORDS_EXCEPTION_MESSAGE_PROPERTY);
+            return new SendMessage(chatId, message);
+        }
+
         UserDictionaryKnowledgeTest test = userDictionaryKnowledgeTestGenerator.generateTest(user);
 
         sendWordPhoto(chatId, test.getPicture());
