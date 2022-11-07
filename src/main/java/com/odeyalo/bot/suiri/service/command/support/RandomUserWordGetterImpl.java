@@ -3,6 +3,7 @@ package com.odeyalo.bot.suiri.service.command.support;
 
 import com.odeyalo.bot.suiri.entity.Dictionary;
 import com.odeyalo.bot.suiri.entity.DictionaryItem;
+import com.odeyalo.bot.suiri.entity.User;
 import com.odeyalo.bot.suiri.repository.DictionaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,15 @@ public class RandomUserWordGetterImpl implements RandomUserWordGetter {
     @Override
     public DictionaryItem getRandomWord(String userId) {
         Dictionary dictionary = this.dictionaryRepository.findDictionaryByUserId(Long.valueOf(userId));
+        return getRandomDictionaryItem(dictionary);
+    }
+
+    @Override
+    public DictionaryItem getRandomWord(User user) {
+        return getRandomDictionaryItem(user.getUserDictionary());
+    }
+
+    private DictionaryItem getRandomDictionaryItem(Dictionary dictionary) {
         List<DictionaryItem> dictionaryItems = dictionary.getItems();
         Random random = new Random();
         int item = random.nextInt(dictionaryItems.size());

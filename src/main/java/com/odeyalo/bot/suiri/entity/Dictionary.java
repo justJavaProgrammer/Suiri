@@ -1,9 +1,6 @@
 package com.odeyalo.bot.suiri.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,8 +16,10 @@ public class Dictionary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
+    @EqualsAndHashCode.Exclude
     private User user;
     @ManyToMany(cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
     private List<DictionaryItem> items = new ArrayList<>();
 
     public void addToDictionary(DictionaryItem item) {

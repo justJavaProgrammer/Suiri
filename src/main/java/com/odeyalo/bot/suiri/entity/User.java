@@ -1,9 +1,6 @@
 package com.odeyalo.bot.suiri.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -24,7 +21,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String telegramId;
     @OneToOne(cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
     private Dictionary userDictionary;
     @OneToOne(cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
     private UserSettings userSettings;
 }
