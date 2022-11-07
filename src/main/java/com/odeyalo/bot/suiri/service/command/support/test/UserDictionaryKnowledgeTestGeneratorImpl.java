@@ -5,7 +5,6 @@ import com.odeyalo.bot.suiri.entity.User;
 import com.odeyalo.bot.suiri.service.command.support.RandomUserWordGetter;
 import com.odeyalo.bot.suiri.service.command.support.TestUserKnowledgeLanguagePropertiesConstants;
 import com.odeyalo.bot.suiri.support.lang.ResponseMessageResolverHelper;
-import com.odeyalo.bot.suiri.support.lang.ResponseMessageResolverDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +22,7 @@ public class UserDictionaryKnowledgeTestGeneratorImpl implements UserDictionaryK
     private final RandomUserWordGetter randomUserWordGetter;
     private final ResponseMessageResolverHelper responseMessageResolverHelper;
 
+    public static final int OPTIONS_LIMIT = 4;
 
     @Autowired
     public UserDictionaryKnowledgeTestGeneratorImpl(RandomUserWordGetter randomUserWordGetter,
@@ -43,7 +43,7 @@ public class UserDictionaryKnowledgeTestGeneratorImpl implements UserDictionaryK
         String translatedText = correctAnswer.getTranslatedText();
         String explanation = getExplanation(user, correctAnswer);
 
-        TreeSet<String> options = getOptions(user);
+        TreeSet<String> options = getOptions(user, OPTIONS_LIMIT, translatedText);
 
         return UserDictionaryKnowledgeTest
                 .builder()
@@ -63,12 +63,23 @@ public class UserDictionaryKnowledgeTestGeneratorImpl implements UserDictionaryK
     private DictionaryItem getCorrectAnswerWord(User user) {
         return randomUserWordGetter.getRandomWord(user);
     }
+
     /**
      * Return a Set of options for test
+     *
      * @return - set of translated words from user's dictionary
      */
-    protected TreeSet<String> getOptions(User user) {
+
+    protected TreeSet<String> getOptions(User user, int limit, String correctAnswer) {
         List<DictionaryItem> dictionaryItems = user.getUserDictionary().getItems();
-        return dictionaryItems.stream().map(DictionaryItem::getTranslatedText).collect(Collectors.toCollection(TreeSet::new));
+        /*
+         * Stream that returns only UNIQUE elements from user's dictionary and map it to String
+         */
+        return dictionaryItems.stream()
+                .distinct()
+                .map(DictionaryItem::getTranslatedText)
+                .filter(translatedText -> !translatedText.equals(correctAnswer))
+                .limit(limit)
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 }
