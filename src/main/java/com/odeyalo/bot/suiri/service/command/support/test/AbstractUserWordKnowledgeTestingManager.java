@@ -1,5 +1,6 @@
 package com.odeyalo.bot.suiri.service.command.support.test;
 
+import com.odeyalo.bot.suiri.entity.User;
 import com.odeyalo.bot.suiri.support.lang.ResponseMessageResolverDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,15 @@ public abstract class AbstractUserWordKnowledgeTestingManager implements UserWor
         this.userDictionaryKnowledgeTestGenerator = userDictionaryKnowledgeTestGenerator;
         this.responseMessageResolverDecorator = responseMessageResolverDecorator;
         this.absSender = absSender;
+    }
+
+    /**
+     *
+     * @param user - user dictionary to check
+     * @return - true if user has enough words to create test
+     */
+    protected boolean checkWords(User user) {
+        return user.getUserDictionary().getItems().size() > 2;
     }
 
     /**
