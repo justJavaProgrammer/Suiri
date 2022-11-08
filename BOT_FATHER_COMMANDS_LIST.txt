@@ -1,3 +1,4 @@
 add - Add a new word to the dictionary
 delete - Delete a word from the dictionary
 test - Test your knowledge
+settings - Change your settings
