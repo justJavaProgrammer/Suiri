@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.odeyalo.bot</groupId>
     <artifactId>suiri</artifactId>
-    <version>1.6.0-SNAPSHOT</version>
+    <version>1.7.0-SNAPSHOT</version>
     <name>Suiri</name>
     <description>Suiri is a powerful telegram bot to learn new words</description>
     <properties>
