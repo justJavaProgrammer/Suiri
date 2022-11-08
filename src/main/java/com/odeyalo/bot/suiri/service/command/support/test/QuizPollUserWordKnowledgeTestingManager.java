@@ -1,6 +1,7 @@
 package com.odeyalo.bot.suiri.service.command.support.test;
 
 import com.odeyalo.bot.suiri.entity.User;
+import com.odeyalo.bot.suiri.entity.UserSettings;
 import com.odeyalo.bot.suiri.service.command.support.QuizPollBuilderHelper;
 import com.odeyalo.bot.suiri.support.TelegramUtils;
 import com.odeyalo.bot.suiri.support.lang.ResponseMessageResolverDecorator;
@@ -50,6 +51,11 @@ public class QuizPollUserWordKnowledgeTestingManager extends AbstractUserWordKno
         sendWordPhoto(chatId, test.getPicture());
 
         return getPoll(chatId, test.getOriginalText(), test.getExplanation(), test.getCorrectAnswer(), update, test.getOptions());
+    }
+
+    @Override
+    public UserSettings.PreferredKnowledgeTestType getType() {
+        return UserSettings.PreferredKnowledgeTestType.QUIZ_POLL;
     }
 
     @SneakyThrows
