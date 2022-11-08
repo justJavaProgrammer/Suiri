@@ -24,8 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.odeyalo.bot.suiri.service.command.steps.settings.SettingsLanguagePropertiesConstants.DEFAULT_SETTINGS_MESSAGE_PROPERTY;
-import static com.odeyalo.bot.suiri.service.command.steps.settings.SettingsLanguagePropertiesConstants.NOTIFICATION_SETTINGS_PROPERTY;
+import static com.odeyalo.bot.suiri.service.command.steps.settings.SettingsLanguagePropertiesConstants.*;
 
 /**
  * CommandExecutor that executes '/settings' command and change user's settings
@@ -66,6 +65,7 @@ public class SettingsCommandExecutor implements CommandExecutor {
 
         String originalCommand = this.translatorDelegate.getOriginalCommand(update);
         UserSettingsChanger userSettingsChanger = changers.get(originalCommand);
+        this.logger.info("Setting changer is: {}", userSettingsChanger);
         if (userSettingsChanger != null) {
             lastChangers.put(chatId, userSettingsChanger);
             return userSettingsChanger.change(update, new SettingsMessage(String.valueOf(telegramUser.getId()), text));
@@ -91,9 +91,11 @@ public class SettingsCommandExecutor implements CommandExecutor {
     private ReplyKeyboardMarkup getKeyboardMarkup(Update update) {
         String language = this.responseMessageResolverDecorator.getResponseMessage(update, GenericLanguagePropertiesConstants.LANGUAGE);
         String notification = this.responseMessageResolverDecorator.getResponseMessage(update, NOTIFICATION_SETTINGS_PROPERTY);
+        String preferredTestType = this.responseMessageResolverDecorator.getResponseMessage(update, PREFERRED_TEST_TYPE_VALUE);
         KeyboardRow buttons = new KeyboardRow();
         buttons.add(0, language);
         buttons.add(1, notification);
+        buttons.add(2, preferredTestType);
         List<KeyboardRow> keyboard = Collections.singletonList(buttons);
         ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup(keyboard);
         replyMarkup.setResizeKeyboard(true);
