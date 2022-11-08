@@ -22,8 +22,10 @@ public class User {
     private String telegramId;
     @OneToOne(cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Dictionary userDictionary;
     @OneToOne(cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private UserSettings userSettings;
 }

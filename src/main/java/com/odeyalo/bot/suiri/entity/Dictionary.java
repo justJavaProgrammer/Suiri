@@ -17,9 +17,11 @@ public class Dictionary {
     private Long id;
     @OneToOne
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private User user;
     @ManyToMany(cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<DictionaryItem> items = new ArrayList<>();
 
     public void addToDictionary(DictionaryItem item) {
