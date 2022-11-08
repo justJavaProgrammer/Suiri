@@ -13,6 +13,8 @@ public class LanguageToLanguageCodeConvertor {
     static {
         codes.put("English", Languages.ENGLISH);
         codes.put("Ukrainian", Languages.UKRAINIAN);
+        codes.put("Англійська", Languages.ENGLISH);
+        codes.put("Українська", Languages.UKRAINIAN);
     }
 
     public static String convert(String lang) {

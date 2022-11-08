@@ -1,6 +1,7 @@
 package com.odeyalo.bot.suiri.service.command.support.test;
 
 import com.odeyalo.bot.suiri.entity.User;
+import com.odeyalo.bot.suiri.entity.UserSettings;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -18,4 +19,9 @@ public interface UserWordKnowledgeTestingManager {
      */
     PartialBotApiMethod<?> getUserKnowledgeTest(Update update, User user);
 
+    /**
+     * Type of user knowledge testing that this class support
+     * @return - string with type
+     */
+    UserSettings.PreferredKnowledgeTestType getType();
 }

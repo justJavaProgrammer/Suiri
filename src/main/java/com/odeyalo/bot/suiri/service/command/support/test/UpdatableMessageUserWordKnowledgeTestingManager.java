@@ -1,6 +1,7 @@
 package com.odeyalo.bot.suiri.service.command.support.test;
 
 import com.odeyalo.bot.suiri.entity.User;
+import com.odeyalo.bot.suiri.entity.UserSettings;
 import com.odeyalo.bot.suiri.service.command.support.test.store.UserKnowledgeTestingStore;
 import com.odeyalo.bot.suiri.support.TelegramUtils;
 import com.odeyalo.bot.suiri.support.lang.ResponseMessageResolverDecorator;
@@ -68,6 +69,11 @@ public class UpdatableMessageUserWordKnowledgeTestingManager extends AbstractUse
 
         sendPhoto(chatId, markupInline, firstQuestion, caption);
         return new SendMessage("", "");
+    }
+
+    @Override
+    public UserSettings.PreferredKnowledgeTestType getType() {
+        return UserSettings.PreferredKnowledgeTestType.UPDATABLE_MESSAGE;
     }
 
     @SneakyThrows

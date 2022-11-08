@@ -13,6 +13,7 @@ public class UkrainianLanguageToCommandTranslator implements LanguageToCommandTr
     {
         words.put("Мова", "Language");
         words.put("Повідомлення", "Notification");
+        words.put("Бажаний тип тестування", "Preferred test type");
     }
 
     @Override

@@ -21,4 +21,11 @@ public class UserSettings {
     private boolean enableNotification;
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
+    @Enumerated(EnumType.STRING)
+    private PreferredKnowledgeTestType testType;
+
+    public enum PreferredKnowledgeTestType {
+        QUIZ_POLL,
+        UPDATABLE_MESSAGE
+    }
 }
