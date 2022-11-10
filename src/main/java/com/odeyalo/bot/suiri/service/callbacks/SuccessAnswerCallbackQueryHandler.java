@@ -2,6 +2,7 @@ package com.odeyalo.bot.suiri.service.callbacks;
 
 import com.odeyalo.bot.suiri.repository.UserRepository;
 import com.odeyalo.bot.suiri.service.command.support.TestUserKnowledgeLanguagePropertiesConstants;
+import com.odeyalo.bot.suiri.service.command.support.media.InputMediaBuilderHelper;
 import com.odeyalo.bot.suiri.service.command.support.test.OptionsInlineKeyboardUtils;
 import com.odeyalo.bot.suiri.service.command.support.test.Questions;
 import com.odeyalo.bot.suiri.service.command.support.test.UserDictionaryKnowledgeTest;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -34,15 +36,17 @@ public class SuccessAnswerCallbackQueryHandler implements CallbackQueryHandler {
     private final UserKnowledgeTestingStore store;
     private final ResponseMessageResolverHelper helper;
     private final UserRepository userRepository;
+    private final InputMediaBuilderHelper inputMediaBuilderHelper;
     private static final String CALLBACK_NAME = "success";
     private final Logger logger = LoggerFactory.getLogger(SuccessAnswerCallbackQueryHandler.class);
 
     @Autowired
-    public SuccessAnswerCallbackQueryHandler(AbsSender absSender, UserKnowledgeTestingStore store, ResponseMessageResolverHelper helper, UserRepository userRepository) {
+    public SuccessAnswerCallbackQueryHandler(AbsSender absSender, UserKnowledgeTestingStore store, ResponseMessageResolverHelper helper, UserRepository userRepository, InputMediaBuilderHelper inputMediaBuilderHelper) {
         this.absSender = absSender;
         this.store = store;
         this.helper = helper;
         this.userRepository = userRepository;
+        this.inputMediaBuilderHelper = inputMediaBuilderHelper;
     }
 
     @Override
@@ -68,7 +72,7 @@ public class SuccessAnswerCallbackQueryHandler implements CallbackQueryHandler {
         String message = this.helper.getMessageByLanguageCode(language, TestUserKnowledgeLanguagePropertiesConstants.ON_START_PROPERTY);
 
         InlineKeyboardMarkup keyboardMarkup = getNextQuestionKeyboard(next);
-        InputMediaPhoto media = getInputMediaPhoto(next, message);
+        InputMedia media = getInputMedia(next, message);
 
         EditMessageMedia build = getEditMessageMedia(messageId, chatId, keyboardMarkup, media);
         this.absSender.execute(build);
@@ -109,7 +113,7 @@ public class SuccessAnswerCallbackQueryHandler implements CallbackQueryHandler {
         return markupInline;
     }
 
-    private EditMessageMedia getEditMessageMedia(long messageId, String chatId, InlineKeyboardMarkup keyboardMarkup, InputMediaPhoto media) {
+    private EditMessageMedia getEditMessageMedia(long messageId, String chatId, InlineKeyboardMarkup keyboardMarkup, InputMedia media) {
         return EditMessageMedia.builder()
                 .chatId(chatId)
                 .messageId(toIntExact(messageId))
@@ -118,10 +122,10 @@ public class SuccessAnswerCallbackQueryHandler implements CallbackQueryHandler {
                 .build();
     }
 
-    private InputMediaPhoto getInputMediaPhoto(UserDictionaryKnowledgeTest next, String message) {
-        InputMediaPhoto media = new InputMediaPhoto(next.getPicture());
-        media.setCaption(message + next.getOriginalText());
-        return media;
+    private InputMedia getInputMedia(UserDictionaryKnowledgeTest next, String message) {
+        InputMedia inputMedia = this.inputMediaBuilderHelper.getInputMedia(next.getPictureType().name(), next.getPicture());
+        inputMedia.setCaption(message + next.getOriginalText());
+        return inputMedia;
     }
 
     private String getUserLanguage(CallbackQuery query) {
