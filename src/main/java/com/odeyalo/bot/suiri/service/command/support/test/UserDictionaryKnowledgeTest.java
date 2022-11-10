@@ -1,5 +1,6 @@
 package com.odeyalo.bot.suiri.service.command.support.test;
 
+import com.odeyalo.bot.suiri.entity.DictionaryItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.SortedSet;
 @Builder
 public class UserDictionaryKnowledgeTest {
     private String picture;
+    private DictionaryItem.PictureType pictureType;
     private String originalText;
     private String correctAnswer;
     private SortedSet<String> options;

@@ -1,6 +1,9 @@
 ## RELEASE NOTES
 
 ## 1.7.0-SNAPSHOT
+* Added gif support to bot
+
+## 1.7.0-SNAPSHOT
 * Added 2 types of knowledge testing using quiz polls and updatable messages
 * Added settings to make a choice between them 
 ## 1.6.0-SNAPSHOT

@@ -41,6 +41,7 @@ public class UserDictionaryKnowledgeTestGeneratorImpl implements UserDictionaryK
         String picture = correctAnswer.getPicture();
         String originalText = correctAnswer.getOriginalText();
         String translatedText = correctAnswer.getTranslatedText();
+        DictionaryItem.PictureType pictureType = correctAnswer.getPictureType();
         String explanation = getExplanation(user, correctAnswer);
 
         TreeSet<String> options = getOptions(user, OPTIONS_LIMIT, translatedText);
@@ -49,6 +50,7 @@ public class UserDictionaryKnowledgeTestGeneratorImpl implements UserDictionaryK
                 .builder()
                 .originalText(originalText)
                 .picture(picture)
+                .pictureType(pictureType)
                 .correctAnswer(translatedText)
                 .explanation(explanation)
                 .options(options)
