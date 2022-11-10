@@ -122,6 +122,7 @@ public class AddNewWordCommandExecutor implements CommandExecutor {
                 .translatedText(message.getTranslatedWords().get(0))
                 .originalText(message.getOriginalWord())
                 .picture(message.getPicture())
+                .pictureType(message.getPictureType())
                 .build();
     }
 
