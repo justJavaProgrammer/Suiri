@@ -18,7 +18,14 @@ public class DictionaryItem {
     @Column(nullable = false)
     private String translatedText;
     private String picture;
+    @Column(length = 100)
+    @Enumerated(EnumType.STRING)
+    private PictureType pictureType;
     @ManyToOne
     @EqualsAndHashCode.Exclude
     private Dictionary dictionary;
+
+    public enum PictureType {
+        PHOTO, GIF
+    }
 }
