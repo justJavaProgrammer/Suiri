@@ -58,6 +58,7 @@ public class StartCommandExecutor implements CommandExecutor {
                 .user(user)
                 .enableNotification(false)
                 .language(userLanguage)
+                .testType(UserSettings.PreferredKnowledgeTestType.UPDATABLE_MESSAGE)
                 .build();
         user.setUserSettings(userSettings);
         user.setUserDictionary(dictionary);

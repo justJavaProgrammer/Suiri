@@ -1,6 +1,9 @@
 ## RELEASE NOTES
 
-## 1.7.0-SNAPSHOT
+## 1.8.1-SNAPSHOT
+* Fixed the bug with '/start' command 
+
+## 1.8.0-SNAPSHOT
 * Added gif support to bot
 
 ## 1.7.0-SNAPSHOT
