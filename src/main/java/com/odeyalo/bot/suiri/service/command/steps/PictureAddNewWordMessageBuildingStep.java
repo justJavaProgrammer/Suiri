@@ -1,6 +1,8 @@
 package com.odeyalo.bot.suiri.service.command.steps;
 
 import com.odeyalo.bot.suiri.domain.AddNewWordMessage;
+import com.odeyalo.bot.suiri.service.command.support.media.PictureData;
+import com.odeyalo.bot.suiri.service.command.support.media.PictureDataResolver;
 import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordState;
 import com.odeyalo.bot.suiri.service.command.support.state.AddNewWordStateRepository;
 import com.odeyalo.bot.suiri.support.TelegramUtils;
@@ -12,20 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.util.List;
 
 import static com.odeyalo.bot.suiri.service.command.steps.AddNewWordLanguagePropertiesConstants.ADD_WORD_PICTURE_STEP_MESSAGE_PROPERTY;
 
 @Component
 public class PictureAddNewWordMessageBuildingStep extends AbstractAddNewWordMessageBuildingStep {
     private final Logger logger = LoggerFactory.getLogger(PictureAddNewWordMessageBuildingStep.class);
+    private final PictureDataResolver pictureDataResolver;
 
     @Autowired
-    public PictureAddNewWordMessageBuildingStep(AddNewWordStateRepository stateRepository, ResponseMessageResolverDecorator responseMessageResolverDecorator) {
+    public PictureAddNewWordMessageBuildingStep(AddNewWordStateRepository stateRepository, ResponseMessageResolverDecorator responseMessageResolverDecorator, PictureDataResolver pictureDataResolver) {
         super(stateRepository, responseMessageResolverDecorator);
+        this.pictureDataResolver = pictureDataResolver;
     }
 
     @SneakyThrows
@@ -34,11 +35,14 @@ public class PictureAddNewWordMessageBuildingStep extends AbstractAddNewWordMess
         String chatId = TelegramUtils.getChatId(update);
         AddNewWordState currentState = getCurrentState(chatId);
         if (currentState != getState()) {
-            this.logger.warn("The step was skipped since state was wrong. Expected: {}, received: {}",  currentState, getState());
+            this.logger.warn("The step was skipped since state was wrong. Expected: {}, received: {}", currentState, getState());
             return null;
         }
-        String fileId = getFileId(update);
-        message.setPicture(fileId);
+        PictureData pictureData = this.pictureDataResolver.getPictureData(update);
+        if (pictureData != null) {
+            message.setPicture(pictureData.getPictureId());
+            message.setPictureType(pictureData.getPictureType());
+        }
         String responseMessage = this.responseMessageResolverDecorator.getResponseMessage(update, ADD_WORD_PICTURE_STEP_MESSAGE_PROPERTY);
         return new SendMessage(chatId, responseMessage);
     }
@@ -48,13 +52,4 @@ public class PictureAddNewWordMessageBuildingStep extends AbstractAddNewWordMess
     public AddNewWordState getState() {
         return AddNewWordState.PICTURE;
     }
-
-
-    private String getFileId(Update update) {
-        List<PhotoSize> filePath = update.getMessage().getPhoto();
-        int index = filePath.size() - 1;
-        PhotoSize photoSize = filePath.get(index);
-        return photoSize.getFileId();
-    }
-
 }
