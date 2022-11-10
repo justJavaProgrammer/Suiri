@@ -1,5 +1,6 @@
 package com.odeyalo.bot.suiri.domain;
 
+import com.odeyalo.bot.suiri.entity.DictionaryItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,5 @@ public class AddNewWordMessage {
     private String originalWord;
     private List<String> translatedWords;
     private String picture;
+    private DictionaryItem.PictureType pictureType;
 }
